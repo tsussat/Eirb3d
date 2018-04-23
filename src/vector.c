@@ -57,7 +57,7 @@ void VectorAdd( vector_t * v, void * data ) {
 					printf( "(EE) Unable to add data to vector\n" );
 					return;
 				}
-			} 
+			}
 			if ( v->size == v->count ) {
 				v->size *= 2;
 				void ** nv = (void **)realloc( v->data, sizeof( void * ) * v->size );
@@ -79,7 +79,7 @@ void VectorRemoveFromIdx( vector_t * v, int idx ) {
 		if ( idx >= v->count ) {
 			return;
 		}
- 		
+
 		v->data[ idx ] = NULL;
 
 		void ** arr = (void **)malloc( sizeof( void * ) * v->count * 2 );
@@ -89,9 +89,9 @@ void VectorRemoveFromIdx( vector_t * v, int idx ) {
 				if ( v->data[ i ] != NULL ) {
 					arr[ j ] = v->data[ i ];
 					j++;
-				}		
+				}
 			}
-		
+
 			free( v->data );
 
 			v->data = arr;
@@ -123,7 +123,7 @@ int VectorGetDataIdx( vector_t * v, void * dat ) {
 		for ( int i = 0; i < v->count; i++ ) {
 			if ( v->data[ i ] == dat ) {
 				return i;
-			}		
+			}
 		}
 	}
 	return -1;

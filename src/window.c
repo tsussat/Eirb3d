@@ -38,9 +38,9 @@ window_t * WindowInit( int width, int height, int bpp ) {
 		return NULL;
 	}
 
-	SDL_Window * sdlwindow = SDL_CreateWindow(	"Software OpenGL renderer", 
-												SDL_WINDOWPOS_CENTERED, 
-												SDL_WINDOWPOS_CENTERED, 
+	SDL_Window * sdlwindow = SDL_CreateWindow(	"Software OpenGL renderer",
+												SDL_WINDOWPOS_CENTERED,
+												SDL_WINDOWPOS_CENTERED,
 												width, height,
 												SDL_WINDOW_ALLOW_HIGHDPI );
 
@@ -61,7 +61,7 @@ window_t * WindowInit( int width, int height, int bpp ) {
 	}
 
 	SDL_Texture * texture = SDL_CreateTexture( renderer, SDL_PIXELFORMAT_BGRA8888, SDL_TEXTUREACCESS_STREAMING, width, height );
-	
+
 	if ( texture == NULL ) {
 		SDL_LogError( SDL_LOG_CATEGORY_APPLICATION, "Couldn't create texture: %s\n", SDL_GetError() );
 		SDL_DestroyTexture( texture );
@@ -114,19 +114,64 @@ void WindowUpdate( window_t * w ) {
 }
 
 void WindowDrawPoint( window_t * w, int x, int y, Uint8 r, Uint8 g, Uint8 b ) {
-	// Fonction à implementer
+	if((x<0) | (x>w->width) | (y<0) | (y>w->height)){
+		SDL_LogError( SDL_LOG_CATEGORY_APPLICATION, "Out of bounds\n");
+		SDL_Quit();
+		exit(-1);
+	}
+	else{
+		w->framebuffer[w->bpp*(y * w->width + x)] = (char) b;
+		w->framebuffer[w->bpp*(y * w->width + x) + 1] = (char) g;
+		w->framebuffer[w->bpp*(y * w->width + x) + 2] = (char) r;
+		w->framebuffer[w->bpp*(y * w->width + x) + 3] = 0xFF;
+	}
 }
 
 void WindowDrawClearColor( window_t * w, Uint8 r, Uint8 g, Uint8 b ) {
-	// Fonction à implementer
+	for (int j = 0; j < w->height; j++){
+		for (int i = 0; i < w->width; i++){
+			WindowDrawPoint(w, i, j, r, g, b);
+		}
+	}
 }
 
-void WindowDrawLine( window_t * w, int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b ) { 
-	// Fonction à implementer
+void WindowDrawLine( window_t * w, int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b ) {
+	int dx,dy,i,xinc,yinc,cumul,x,y ;
+  x = x0 ;
+  y = y0 ;
+  dx = x1 - x0 ;
+  dy = y1 - y0 ;
+  xinc = ( dx > 0 ) ? 1 : -1 ;
+  yinc = ( dy > 0 ) ? 1 : -1 ;
+  dx = abs(dx) ;
+  dy = abs(dy) ;
+  WindowDrawPoint(w, x , y, r, g, b) ;
+  if ( dx > dy ) {
+    cumul = dx / 2 ;
+    for ( i = 1 ; i <= dx ; i++ ) {
+      x += xinc ;
+      cumul += dy ;
+      if ( cumul >= dx ) {
+        cumul -= dx ;
+        y += yinc ;
+			}
+      WindowDrawPoint(w, x , y, r, g, b) ;
+		}
+	}
+  else {
+    cumul = dy / 2 ;
+    for ( i = 1 ; i <= dy ; i++ ) {
+      y += yinc ;
+      cumul += dx ;
+      if ( cumul >= dy ) {
+        cumul -= dy ;
+        x += xinc ;
+			}
+      WindowDrawPoint(w, x , y, r, g, b) ;
+		}
+	}
 }
 
-void WindowDrawTriangle( window_t * w ) { 
+void WindowDrawTriangle( window_t * w ) {
 	// Fonction à implementer
 }
-
-
