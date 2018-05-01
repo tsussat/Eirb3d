@@ -8,7 +8,7 @@
 
 int main( int argc, char ** argv ) {
 
-	ModelLoad("./bin/data/diablo.obj");
+	ModelLoad("./bin/data/head.obj");
 
 
 	vector_t * g_vertex = ModelVertices();
