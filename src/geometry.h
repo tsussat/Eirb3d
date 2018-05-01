@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 /**
- * Définition des types
+ * Dï¿½finition des types
  */
 typedef float ** matrixf_t;
 
@@ -16,7 +16,7 @@ typedef struct vec3i		{ int x; int y; int z;			} vec3i_t;
 typedef struct face		{ int v[ 3 ]; int vt[ 3 ]; int vn[ 3 ];	} face_t;
 
 /**
- * Définition des macros
+ * Dï¿½finition des macros
  */
 
 /**
@@ -39,7 +39,7 @@ typedef struct face		{ int v[ 3 ]; int vt[ 3 ]; int vn[ 3 ];	} face_t;
     } \
 
 /**
- * Définition des prototypes de fonctions et implémentation des fonctions inline
+ * Dï¿½finition des prototypes de fonctions et implï¿½mentation des fonctions inline
  */
 
 /**
@@ -53,7 +53,7 @@ matrixf_t	Matrixf		( int n, int m );
 void		MatrixfDelete	( matrixf_t m, int n );
 
 /**
- * Construit une matrice identité flottante de dimension n x n
+ * Construit une matrice identitï¿½ flottante de dimension n x n
  */
 matrixf_t	MatrixfIdentity	( int n );
 

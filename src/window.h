@@ -9,7 +9,7 @@
 #include "SDL2/SDL.h"
 
 /**
- * Définition des types
+ * Dï¿½finition des types
  */
 typedef struct window {
 	SDL_Window	*	sdlwindow;
@@ -23,37 +23,38 @@ typedef struct window {
 }window_t;
 
 /**
- * Définition des prototypes de fonctions
+ * Dï¿½finition des prototypes de fonctions
  */
 
 /**
- * Initialise et ouvre une nouvelle fenêtre
+ * Initialise et ouvre une nouvelle fenï¿½tre
  */
 window_t	*	WindowInit		( int width, int height, int bpp );
 
 /**
- * Ferme et detruit une fênetre
+ * Ferme et detruit une fï¿½netre
  */
 void			WindowDestroy		( window_t * w );
 
 /**
- * Efface une fenêtre avec la couleur souhaîtée
+ * Efface une fenï¿½tre avec la couleur souhaï¿½tï¿½e
  */
 void			WindowDrawClearColor	( window_t * w, unsigned char r, unsigned char g, unsigned char b );
 
 /**
- * Met à jour le contenu de la fenêtre
+ * Met ï¿½ jour le contenu de la fenï¿½tre
  */
 void			WindowUpdate		( window_t * w );
 
 /**
- * Dessine un point coloré dans la fenêtre
+ * Dessine un point colorï¿½ dans la fenï¿½tre
  */
 void			WindowDrawPoint		( window_t * w, int x, int y, Uint8 r, Uint8 g, Uint8 b );
 
 /**
- * Dessine une ligne colorée dans la fenêtre
+ * Dessine une ligne colorï¿½e dans la fenï¿½tre
  */
 void			WindowDrawLine		( window_t * w, int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b );
 
+void      WindowDrawTriangle( window_t * w, int x0, int y0, int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b );
 #endif //__WINDOW_H__

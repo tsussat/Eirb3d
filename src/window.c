@@ -115,7 +115,7 @@ void WindowUpdate( window_t * w ) {
 
 void WindowDrawPoint( window_t * w, int x, int y, Uint8 r, Uint8 g, Uint8 b ) {
 	if((x<0) | (x>w->width) | (y<0) | (y>w->height)){
-		SDL_LogError( SDL_LOG_CATEGORY_APPLICATION, "Out of bounds\n");
+		SDL_LogError( SDL_LOG_CATEGORY_APPLICATION, "Out of bounds trying to draw x:%d y:%d\n", x, y);
 		SDL_Quit();
 		exit(-1);
 	}
@@ -172,6 +172,26 @@ void WindowDrawLine( window_t * w, int x0, int y0, int x1, int y1, Uint8 r, Uint
 	}
 }
 
-void WindowDrawTriangle( window_t * w ) {
-	// Fonction à implementer
+void WindowDrawTriangle( window_t * w, int x0, int y0, int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b ) {
+
+	int xa = x2 - x0;
+	int ya = y2 - y0;
+	double a = ( (ya!=0) ? ((double)xa/(double)ya) : (xa) );
+
+	int xb1 = x1 - x0;
+	int yb1 = y1 - y0;
+	double b1 = ( (yb1!=0) ? ((double)xb1/(double)yb1) : (xb1) );
+
+	int xb2 = x2 - x1;
+	int yb2 = y2 - y1;
+	double b2 = ( (yb2!=0) ? ((double)xb2/(double)yb2) : (xb2) );
+
+	for(int i=0; i<ya; i++){
+		if(i<yb1){
+			WindowDrawLine(w, x0 + (int)(i*a), y0 + i, x0 + (int)(i*b1), y0 + i, r, g, b);
+		}
+		else{
+			WindowDrawLine(w, x0 + (int)(i*a), y0 + i, x1 + (int)((i-yb1)*b2), y0 + i, r, g, b);
+		}
+	}
 }
