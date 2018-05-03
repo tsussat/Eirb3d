@@ -5,6 +5,7 @@
 #include "model.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include <float.h>
 
 int main( int argc, char ** argv ) {
 
@@ -43,30 +44,41 @@ int main( int argc, char ** argv ) {
 		// Dessin d'une ligne
 		WindowDrawLine( mainwindow, 0, 0, width-1, height-1, 255, 255, 255);
 */
+		int buffsize = height * width;
+		float zbuff[buffsize];
+		for(int i = 0; i< buffsize; i++){
+			zbuff[i]=-FLT_MAX;
+		}
 
 		for(int i = 0; i<VectorGetLength(g_face); i++){
+
 			face_t * face = (face_t *) VectorGetFromIdx(g_face, i);
 			vec3f_t * point0 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[0]-1);
 			int x0 = (point0->x + 1) / 2 * width;
 			int y0 = height - (point0->y + 1) / 2 * height;
+			float z0 = point0->z;
 
 			vec3f_t * point1 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[1]-1);
 			int x1 = (point1->x + 1) / 2 * width;
 			int y1 = height - (point1->y + 1) / 2 * height;
+			float z1 = point1->z;
 
 			vec3f_t * point2 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[2]-1);
 			int x2 = (point2->x + 1) / 2 * width;
 			int y2 = height - (point2->y + 1) / 2 * height;
+			float z2 = point2->z;
+
+			float z = (z0>z1)?z0:(z1>z2)?z1:z2;
 
 			//tri sommets
 			if(y2 < y1){
-				swap(&y1,&y2); swap(&x1,&x2);
+				swapf(&z1,&z2); swap(&y1,&y2); swap(&x1,&x2);
 			}
 			if(y1 < y0){
-				swap(&y1,&y0); swap(&x1,&x0);
+				swapf(&z1,&z0); swap(&y1,&y0); swap(&x1,&x0);
 			}
 			if(y2 < y1){
-				swap(&y1,&y2); swap(&x1,&x2);
+				swapf(&z1,&z2); swap(&y1,&y2); swap(&x1,&x2);
 			}
 			//printf("try %d, %d %d %d %d %d %d\n", i, x0, y0, x1, y1, x2, y2);
 
@@ -79,7 +91,7 @@ int main( int argc, char ** argv ) {
 			//intensite lumiere
 			float intens = lum.x*norm.x + lum.y*norm.y + lum.z*norm.z;
 			if(intens>0){
-				WindowDrawTriangle(mainwindow, x0, y0, x1, y1, x2, y2, (int)(intens*255), (int)(intens*255), (int)(intens*255));
+				WindowDrawTriangle(mainwindow, zbuff, z, x0, y0, x1, y1, x2, y2, (int)(intens*255), (int)(intens*255), (int)(intens*255));
 			}
 
 			/*WindowDrawLine(mainwindow, x0, y0, x1, y1, 255, 255, 255);

@@ -135,7 +135,7 @@ void WindowDrawClearColor( window_t * w, Uint8 r, Uint8 g, Uint8 b ) {
 	}
 }
 
-void WindowDrawLine( window_t * w, int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b ) {
+void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b ) {
 	int dx,dy,i,xinc,yinc,cumul,x,y ;
   x = x0 ;
   y = y0 ;
@@ -145,7 +145,10 @@ void WindowDrawLine( window_t * w, int x0, int y0, int x1, int y1, Uint8 r, Uint
   yinc = ( dy > 0 ) ? 1 : -1 ;
   dx = abs(dx) ;
   dy = abs(dy) ;
-  WindowDrawPoint(w, x , y, r, g, b) ;
+	if(zbuff[y * w->width + x] < z){
+		zbuff[y * w->width + x] = z;
+	  WindowDrawPoint(w, x, y, r, g, b) ;
+	}
   if ( dx > dy ) {
     cumul = dx / 2 ;
     for ( i = 1 ; i <= dx ; i++ ) {
@@ -155,7 +158,10 @@ void WindowDrawLine( window_t * w, int x0, int y0, int x1, int y1, Uint8 r, Uint
         cumul -= dx ;
         y += yinc ;
 			}
-      WindowDrawPoint(w, x , y, r, g, b) ;
+			if(zbuff[y * w->width + x] < z){
+				zbuff[y * w->width + x] = z;
+			  WindowDrawPoint(w, x, y, r, g, b) ;
+			}
 		}
 	}
   else {
@@ -167,12 +173,15 @@ void WindowDrawLine( window_t * w, int x0, int y0, int x1, int y1, Uint8 r, Uint
         cumul -= dy ;
         x += xinc ;
 			}
-      WindowDrawPoint(w, x , y, r, g, b) ;
+			if(zbuff[y * w->width + x] < z){
+				zbuff[y * w->width + x] = z;
+			  WindowDrawPoint(w, x, y, r, g, b) ;
+			}
 		}
 	}
 }
 
-void WindowDrawTriangle( window_t * w, int x0, int y0, int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b ) {
+void WindowDrawTriangle( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b ) {
 	//parametres equation droite A
 	int xa = x2 - x0;
 	int ya = y2 - y0;
@@ -189,11 +198,11 @@ void WindowDrawTriangle( window_t * w, int x0, int y0, int x1, int y1, int x2, i
 	for(int i=0; i<ya; i++){
 		//B1
 		if(i<yb1){
-			WindowDrawLine(w, x0 + (int)(i*a), y0 + i, x0 + (int)(i*b1), y0 + i, r, g, b);
+			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x0 + (int)(i*b1), y0 + i, r, g, b);
 		}
 		//B2
 		else{
-			WindowDrawLine(w, x0 + (int)(i*a), y0 + i, x1 + (int)((i-yb1)*b2), y0 + i, r, g, b);
+			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x1 + (int)((i-yb1)*b2), y0 + i, r, g, b);
 		}
 	}
 }

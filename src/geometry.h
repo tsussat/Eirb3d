@@ -81,6 +81,12 @@ inline void swap( int * a, int * b ) {
     *b = temp;
 }
 
+inline void swapf( float * a, float * b ) {
+    float temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 /**
  * Construit un vecteur flottant de dimension 3 et positonne ses composantes
  */
