@@ -10,6 +10,8 @@
 int main( int argc, char ** argv ) {
 
 	ModelLoad("./bin/data/head.obj");
+	int imgwidth,imgheigth,comp;
+	unsigned char *Texture = stbi_load("./bin/data/head_diffuse.tga", &imgwidth, &imgheigth, &comp, STBI_rgb_alpha);
 
 	vector_t * g_vertex = ModelVertices();
 	vector_t * g_norm = ModelNormals();
@@ -68,17 +70,29 @@ int main( int argc, char ** argv ) {
 			int y2 = height - (point2->y + 1) / 2 * height;
 			float z2 = point2->z;
 
+			//picks highest z value
 			float z = (z0>z1)?z0:(z1>z2)?z1:z2;
+
+			//vt loading
+			vec2f_t * tex0 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->v[0]-1);
+			int tx0 = (int)tex0->x * imgwidth;
+			int ty0 = (int)tex0->y * imgheigth;
+			vec2f_t * tex1 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->v[1]-1);
+			int tx1 = (int)tex1->x * imgwidth;
+			int ty1 = (int)tex1->y * imgheigth;;
+			vec2f_t * tex2 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->v[2]-1);
+			int tx2 = (int)tex2->x * imgwidth;
+			int ty2 = (int)tex2->y * imgheigth;;
 
 			//tri sommets
 			if(y2 < y1){
-				swapf(&z1,&z2); swap(&y1,&y2); swap(&x1,&x2);
+				swapf(&z1,&z2); swap(&y1,&y2); swap(&x1,&x2); swap(&tx1, &tx2); swap(&ty1, &ty2);
 			}
 			if(y1 < y0){
-				swapf(&z1,&z0); swap(&y1,&y0); swap(&x1,&x0);
+				swapf(&z1,&z0); swap(&y1,&y0); swap(&x1,&x0); swap(&tx1, &tx0); swap(&ty1, &ty0);
 			}
 			if(y2 < y1){
-				swapf(&z1,&z2); swap(&y1,&y2); swap(&x1,&x2);
+				swapf(&z1,&z2); swap(&y1,&y2); swap(&x1,&x2); swap(&tx1, &tx2); swap(&ty1, &ty2);
 			}
 			//printf("try %d, %d %d %d %d %d %d\n", i, x0, y0, x1, y1, x2, y2);
 
