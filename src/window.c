@@ -150,7 +150,7 @@ void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1
   //dy = abs(dy) ;
 	if(zbuff[y * w->width + x] < z){
 		zbuff[y * w->width + x] = z;
-	  WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)+2]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)]*intens)) ;
+	  WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)+2]*intens)) ;
 	}
   //if ( dx > dy ) {
     //cumul = dx / 2 ;
@@ -168,7 +168,7 @@ void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1
 			*/
 			if(zbuff[y * w->width + x] < z){
 				zbuff[y * w->width + x] = z;
-			  WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)+2]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)]*intens)) ;
+			  WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)+2]*intens)) ;
 			}
 		//}
 	}

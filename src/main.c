@@ -74,15 +74,15 @@ int main( int argc, char ** argv ) {
 			float z = (z0>z1)?z0:(z1>z2)?z1:z2;
 
 			//vt loading
-			vec2f_t * tex0 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->v[0]-1);
-			int tx0 = (int)tex0->x * imgwidth;
-			int ty0 = (int)tex0->y * imgheigth;
-			vec2f_t * tex1 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->v[1]-1);
-			int tx1 = (int)tex1->x * imgwidth;
-			int ty1 = (int)tex1->y * imgheigth;;
-			vec2f_t * tex2 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->v[2]-1);
-			int tx2 = (int)tex2->x * imgwidth;
-			int ty2 = (int)tex2->y * imgheigth;;
+			vec2f_t * tex0 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->vt[0]-1);
+			int tx0 = (int)(tex0->x * imgwidth);
+			int ty0 = imgheigth-(int)(tex0->y * imgheigth);
+			vec2f_t * tex1 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->vt[1]-1);
+			int tx1 = (int)(tex1->x * imgwidth);
+			int ty1 = imgheigth-(int)(tex1->y * imgheigth);
+			vec2f_t * tex2 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->vt[2]-1);
+			int tx2 = (int)(tex2->x * imgwidth);
+			int ty2 = imgheigth-(int)(tex2->y * imgheigth);
 
 			//tri sommets
 			if(y2 < y1){
