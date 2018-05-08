@@ -9,9 +9,9 @@
 
 int main( int argc, char ** argv ) {
 
-	ModelLoad("./bin/data/head.obj");
+	ModelLoad("./bin/data/diablo.obj");
 	int imgwidth,imgheigth,comp;
-	unsigned char *Texture = stbi_load("./bin/data/head_diffuse.tga", &imgwidth, &imgheigth, &comp, STBI_rgb_alpha);
+	unsigned char *Texture = stbi_load("./bin/data/diablo_diffuse.tga", &imgwidth, &imgheigth, &comp, STBI_rgb_alpha);
 
 	vector_t * g_vertex = ModelVertices();
 	vector_t * g_norm = ModelNormals();
@@ -105,7 +105,7 @@ int main( int argc, char ** argv ) {
 			//intensite lumiere
 			float intens = lum.x*norm.x + lum.y*norm.y + lum.z*norm.z;
 			if(intens>0){
-				WindowDrawTriangle(mainwindow, zbuff, z, x0, y0, x1, y1, x2, y2, intens, tx0, ty0, tx1, ty1, tx2, ty2, Texture, imgwidth, imgheigth, comp);
+				WindowDrawTriangle(mainwindow, zbuff, z, x0, y0, x1, y1, x2, y2, intens, tx0, ty0, tx1, ty1, tx2, ty2, Texture, imgwidth, imgheigth, STBI_rgb_alpha);
 			}
 
 			/*WindowDrawLine(mainwindow, x0, y0, x1, y1, 255, 255, 255);

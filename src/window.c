@@ -136,9 +136,12 @@ void WindowDrawClearColor( window_t * w, Uint8 r, Uint8 g, Uint8 b ) {
 }
 
 void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, float intens, int tx0, int ty0, int tx1, int ty1, unsigned char *Texture, int imgwidth, int imgheigth, int comp ) {
-	int dx,dy,i,xinc,yinc,cumul,x,y ;
+	int dx,dy,i,xinc,yinc,cumul,x,y,tx,ty ;
   x = x0 ;
   y = y0 ;
+	tx = tx0 ;
+	ty = ty0 ;
+
   dx = x1 - x0 ;
   //dy = y1 - y0 ;
   xinc = ( dx > 0 ) ? 1 : -1 ;
@@ -147,12 +150,15 @@ void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1
   //dy = abs(dy) ;
 	if(zbuff[y * w->width + x] < z){
 		zbuff[y * w->width + x] = z;
-	  WindowDrawPoint(w, x, y, int(255*intens), int(255*intens), int(255*intens)) ;
+	  WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)+2]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)]*intens)) ;
 	}
   //if ( dx > dy ) {
     //cumul = dx / 2 ;
     for ( i = 1 ; i <= dx ; i++ ) {
       x += xinc ;
+
+			tx = (int)((tx0*i+(dx-i)*tx1)/dx);
+			ty = (int)((ty0*i+(dx-i)*ty1)/dx);
 			/*
       cumul += dy ;
       if ( cumul >= dx ) {
@@ -162,7 +168,7 @@ void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1
 			*/
 			if(zbuff[y * w->width + x] < z){
 				zbuff[y * w->width + x] = z;
-			  WindowDrawPoint(w, x, y, int(255*intens), int(255*intens), int(255*intens)) ;
+			  WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)+2]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)]*intens)) ;
 			}
 		//}
 	}
