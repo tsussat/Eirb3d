@@ -100,12 +100,12 @@ int main( int argc, char ** argv ) {
 			vec3f_t lum = Vec3f(0, 0, 1);
 
 			//normale
-			vec3f_t norm = Vec3fNormalize(Vec3fCross(Vec3fSub(point0[0], point1[0]) , Vec3fSub(point0[0], point2[0])));
+			vec3f_t norm = Vec3fNormalize(Vec3fCross(Vec3fSub(*point0, *point1) , Vec3fSub(*point0, *point2)));
 
 			//intensite lumiere
 			float intens = lum.x*norm.x + lum.y*norm.y + lum.z*norm.z;
 			if(intens>0){
-				WindowDrawTriangle(mainwindow, zbuff, z, x0, y0, x1, y1, x2, y2, (int)(intens*255), (int)(intens*255), (int)(intens*255));
+				WindowDrawTriangle(mainwindow, zbuff, z, x0, y0, x1, y1, x2, y2, intens, tx0, ty0, tx1, ty1, tx2, ty2, Texture, imgwidth, imgheigth, comp);
 			}
 
 			/*WindowDrawLine(mainwindow, x0, y0, x1, y1, 255, 255, 255);

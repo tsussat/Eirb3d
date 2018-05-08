@@ -135,35 +135,38 @@ void WindowDrawClearColor( window_t * w, Uint8 r, Uint8 g, Uint8 b ) {
 	}
 }
 
-void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b ) {
+void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, float intens, int tx0, int ty0, int tx1, int ty1, unsigned char *Texture, int imgwidth, int imgheigth, int comp ) {
 	int dx,dy,i,xinc,yinc,cumul,x,y ;
   x = x0 ;
   y = y0 ;
   dx = x1 - x0 ;
-  dy = y1 - y0 ;
+  //dy = y1 - y0 ;
   xinc = ( dx > 0 ) ? 1 : -1 ;
-  yinc = ( dy > 0 ) ? 1 : -1 ;
+  //yinc = ( dy > 0 ) ? 1 : -1 ;
   dx = abs(dx) ;
-  dy = abs(dy) ;
+  //dy = abs(dy) ;
 	if(zbuff[y * w->width + x] < z){
 		zbuff[y * w->width + x] = z;
-	  WindowDrawPoint(w, x, y, r, g, b) ;
+	  WindowDrawPoint(w, x, y, int(255*intens), int(255*intens), int(255*intens)) ;
 	}
-  if ( dx > dy ) {
-    cumul = dx / 2 ;
+  //if ( dx > dy ) {
+    //cumul = dx / 2 ;
     for ( i = 1 ; i <= dx ; i++ ) {
       x += xinc ;
+			/*
       cumul += dy ;
       if ( cumul >= dx ) {
         cumul -= dx ;
         y += yinc ;
 			}
+			*/
 			if(zbuff[y * w->width + x] < z){
 				zbuff[y * w->width + x] = z;
-			  WindowDrawPoint(w, x, y, r, g, b) ;
+			  WindowDrawPoint(w, x, y, int(255*intens), int(255*intens), int(255*intens)) ;
 			}
-		}
+		//}
 	}
+	/*
   else {
     cumul = dy / 2 ;
     for ( i = 1 ; i <= dy ; i++ ) {
@@ -179,30 +182,36 @@ void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1
 			}
 		}
 	}
+	*/
 }
 
-void WindowDrawTriangle( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b ) {
+void WindowDrawTriangle( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, int x2, int y2, float intens, int tx0, int ty0, int tx1, int ty1, int tx2, int ty2, unsigned char *Texture, int imgwidth, int imgheigth, int comp) {
 	//parametres equation droite A
 	int xa = x2 - x0;
 	int ya = y2 - y0;
 	double a = ( (ya!=0) ? ((double)xa/(double)ya) : (xa) );
+
+
 	//parametres equation droite B1
 	int xb1 = x1 - x0;
 	int yb1 = y1 - y0;
 	double b1 = ( (yb1!=0) ? ((double)xb1/(double)yb1) : (xb1) );
+
+
 	//parametres equation droite B2
 	int xb2 = x2 - x1;
 	int yb2 = y2 - y1;
 	double b2 = ( (yb2!=0) ? ((double)xb2/(double)yb2) : (xb2) );
 
+
 	for(int i=0; i<ya; i++){
 		//B1
 		if(i<yb1){
-			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x0 + (int)(i*b1), y0 + i, r, g, b);
+			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x0 + (int)(i*b1), y0 + i, intens, (int)((i*tx0+(ya-i)*tx2)/ya), (int)((i*ty0+(ya-i)*ty2)/ya), (int)((i*tx0+(yb1-i)*tx1)/yb1), (int)((i*ty0+(yb1-i)*ty1)/yb1), Texture, imgwidth, imgheigth, comp);
 		}
 		//B2
 		else{
-			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x1 + (int)((i-yb1)*b2), y0 + i, r, g, b);
+			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x1 + (int)((i-yb1)*b2), y0 + i, intens, (int)((i*tx0+(ya-i)*tx2)/ya), (int)((i*ty0+(ya-i)*ty2)/ya), (int)(((i-yb1)*tx1+(yb2-i+yb1)*tx2)/yb2), (int)(((i-yb1)*ty1+(yb2-i+yb1)*ty2)/yb2), Texture, imgwidth, imgheigth, comp);
 		}
 	}
 }

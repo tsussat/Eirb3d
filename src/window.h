@@ -54,7 +54,7 @@ void			WindowDrawPoint		( window_t * w, int x, int y, Uint8 r, Uint8 g, Uint8 b 
 /**
  * Dessine une ligne color�e dans la fen�tre
  */
-void			WindowDrawLine		( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b );
+void			WindowDrawLine		( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, float intens, int tx0, int ty0, int tx1, int ty1, unsigned char *Texture, int imgwidth, int imgheigth, int comp );
 
-void      WindowDrawTriangle( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b );
+void   WindowDrawTriangle  ( window_t * w, float *zbuff, float z, int x0, int y0, int x1, int y1, int x2, int y2, float intens, int tx0, int ty0, int tx1, int ty1, int tx2, int ty2, unsigned char *Texture, int imgwidth, int imgheigth, int comp);
 #endif //__WINDOW_H__
