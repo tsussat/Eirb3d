@@ -148,7 +148,7 @@ void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1
   //yinc = ( dy > 0 ) ? 1 : -1 ;
   dx = abs(dx) ;
   //dy = abs(dy) ;
-	if(zbuff[y * w->width + x] < z){
+	if(zbuff[y * w->width + x] <= z){
 		zbuff[y * w->width + x] = z;
 	  WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)+2]*intens)) ;
 	}
@@ -157,8 +157,8 @@ void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1
     for ( i = 1 ; i <= dx ; i++ ) {
       x += xinc ;
 
-			tx = (int)((tx0*i+(dx-i)*tx1)/dx);
-			ty = (int)((ty0*i+(dx-i)*ty1)/dx);
+			tx = (tx1*i+(dx+1-i)*tx0)/(dx+1);
+			ty = (ty1*i+(dx+1-i)*ty0)/(dx+1);
 			/*
       cumul += dy ;
       if ( cumul >= dx ) {
@@ -166,7 +166,7 @@ void WindowDrawLine( window_t * w, float *zbuff, float z, int x0, int y0, int x1
         y += yinc ;
 			}
 			*/
-			if(zbuff[y * w->width + x] < z){
+			if(zbuff[y * w->width + x] <= z){
 				zbuff[y * w->width + x] = z;
 			  WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)+2]*intens)) ;
 			}
@@ -213,11 +213,11 @@ void WindowDrawTriangle( window_t * w, float *zbuff, float z, int x0, int y0, in
 	for(int i=0; i<ya; i++){
 		//B1
 		if(i<yb1){
-			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x0 + (int)(i*b1), y0 + i, intens, (int)((i*tx0+(ya-i)*tx2)/ya), (int)((i*ty0+(ya-i)*ty2)/ya), (int)((i*tx0+(yb1-i)*tx1)/yb1), (int)((i*ty0+(yb1-i)*ty1)/yb1), Texture, imgwidth, imgheigth, comp);
+			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x0 + (int)(i*b1), y0 + i, intens, (i*tx2+(ya-i)*tx0)/ya, (i*ty2+(ya-i)*ty0)/ya, (i*tx1+(yb1-i)*tx2)/yb1, (i*ty1+(yb1-i)*ty0)/yb1, Texture, imgwidth, imgheigth, comp);
 		}
 		//B2
 		else{
-			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x1 + (int)((i-yb1)*b2), y0 + i, intens, (int)((i*tx0+(ya-i)*tx2)/ya), (int)((i*ty0+(ya-i)*ty2)/ya), (int)(((i-yb1)*tx1+(yb2-i+yb1)*tx2)/yb2), (int)(((i-yb1)*ty1+(yb2-i+yb1)*ty2)/yb2), Texture, imgwidth, imgheigth, comp);
+			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x1 + (int)((i-yb1)*b2), y0 + i, intens, (i*tx2+(ya-i)*tx0)/ya, (i*ty2+(ya-i)*ty0)/ya, ((i-yb1)*tx2+(yb2-i+yb1)*tx1)/yb2, ((i-yb1)*ty2+(yb2-i+yb1)*ty1)/yb2, Texture, imgwidth, imgheigth, comp);
 		}
 	}
 }
