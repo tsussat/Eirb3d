@@ -213,7 +213,7 @@ void WindowDrawTriangle( window_t * w, float *zbuff, float z, int x0, int y0, in
 	for(int i=0; i<ya; i++){
 		//B1
 		if(i<yb1){
-			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x0 + (int)(i*b1), y0 + i, intens, (i*tx2+(ya-i)*tx0)/ya, (i*ty2+(ya-i)*ty0)/ya, (i*tx1+(yb1-i)*tx2)/yb1, (i*ty1+(yb1-i)*ty0)/yb1, Texture, imgwidth, imgheigth, comp);
+			WindowDrawLine(w, zbuff, z, x0 + (int)(i*a), y0 + i, x0 + (int)(i*b1), y0 + i, intens, (i*tx2+(ya-i)*tx0)/ya, (i*ty2+(ya-i)*ty0)/ya, (i*tx1+(yb1-i)*tx0)/yb1, (i*ty1+(yb1-i)*ty0)/yb1, Texture, imgwidth, imgheigth, comp);
 		}
 		//B2
 		else{

@@ -107,6 +107,9 @@ int main( int argc, char ** argv ) {
 			if(intens>0){
 				WindowDrawTriangle(mainwindow, zbuff, z, x0, y0, x1, y1, x2, y2, intens, tx0, ty0, tx1, ty1, tx2, ty2, Texture, imgwidth, imgheigth, STBI_rgb_alpha);
 			}
+			else{
+				WindowDrawTriangle(mainwindow, zbuff, z, x0, y0, x1, y1, x2, y2, -intens, tx0, ty0, tx1, ty1, tx2, ty2, Texture, imgwidth, imgheigth, STBI_rgb_alpha);
+			}
 
 			/*WindowDrawLine(mainwindow, x0, y0, x1, y1, 255, 255, 255);
 			WindowDrawLine(mainwindow, x0, y0, x2, y2, 255, 255, 255);
