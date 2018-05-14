@@ -5,51 +5,51 @@
 #include "geometry.h"
 
 /**
- * Définition des prototypes de fonctions
+ * Dï¿½finition des prototypes de fonctions
  */
 
 /**
- * Retourne la liste des sommets du modèle
+ * Retourne la liste des sommets du modï¿½le
  */
 vector_t	*	ModelVertices		();
 
 /**
- * Retourne la liste des normales du modèle
+ * Retourne la liste des normales du modï¿½le
  */
 vector_t	*	ModelNormals		();
 
 /**
- * Retourne la liste des coordonnées de texture du modèle
+ * Retourne la liste des coordonnï¿½es de texture du modï¿½le
  */
 vector_t	*	ModelTexcoords		();
 
 /**
- * Retourne la liste des faces du modèle
+ * Retourne la liste des faces du modï¿½le
  */
 vector_t	*	ModelFaces		();
 
 /**
- * Retourne le sommet du modèle à l'index spécifié
+ * Retourne le sommet du modï¿½le ï¿½ l'index spï¿½cifiï¿½
  */
 vec3f_t			ModelGetVertex		( int idx );
 
 /**
- * Retourne la normale du modèle à l'index spécifié
+ * Retourne la normale du modï¿½le ï¿½ l'index spï¿½cifiï¿½
  */
 vec3f_t			ModelGetNormal		( int idx );
 
 /**
- * Retourne les coordonnés de texture du modèle à l'index spécifié
+ * Retourne les coordonnï¿½s de texture du modï¿½le ï¿½ l'index spï¿½cifiï¿½
  */
 vec3f_t			ModelGetTexcoord	( int idx );
 
 /**
- * Retourne la face du modèle à l'index spécifié
+ * Retourne la face du modï¿½le ï¿½ l'index spï¿½cifiï¿½
  */
 face_t			ModelGetFace		( int idx );
 
 /**
- * Charge un modèle 3D à partir du fichier spécifié
+ * Charge un modï¿½le 3D ï¿½ partir du fichier spï¿½cifiï¿½
  */
 bool			ModelLoad		( char * objfilename );
 
