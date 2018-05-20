@@ -191,7 +191,7 @@ void WindowDrawLine( window_t * w, float *zbuff, int x0, int y0, float z0, int x
 	//calcul de l'intensite
 	intens = lumx*norm.x + lumy*norm.y + lumz*norm.z;
 	if (intens < 0){
-		intens = - intens;
+		intens = 0;
 	}
   dx = x1 - x0 ;
   xinc = ( dx > 0 ) ? 1 : -1 ;
@@ -223,7 +223,7 @@ void WindowDrawLine( window_t * w, float *zbuff, int x0, int y0, float z0, int x
 		norm = Vec3fNormalize(norm);
 		intens = lumx*norm.x + lumy*norm.y + lumz*norm.z;
 		if (intens < 0){
-			intens = - intens;
+			intens = 0;
 		}
 
 		//affichage du point

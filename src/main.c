@@ -36,7 +36,7 @@ int main( int argc, char ** argv ) {
 		WindowDrawClearColor( mainwindow, 64, 64, 64 );
 
 		//lumiere
-		vec3f_t lum = Vec3f(0, 0, 1);
+		vec3f_t lum = Vec3f(0, -1, .5);
 
 		int buffsize = height * width;
 		float zbuff[buffsize];
