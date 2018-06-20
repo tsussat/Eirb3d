@@ -51,6 +51,6 @@ face_t			ModelGetFace		( int idx );
 /**
  * Charge un mod�le 3D � partir du fichier sp�cifi�
  */
-bool			ModelLoad		( char * objfilename );
+bool			ModelLoad		( char * objfilename , float* xoffset, float* yoffset, float* range );
 
 #endif // __MODEL_H__

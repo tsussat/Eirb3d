@@ -2,7 +2,7 @@ TARGET 		= eirb3d
 
 CC 		= g++
 
-CFLAGS 		= -W -Wall
+CFLAGS 		= -W -Wall -fPIC
 
 LINKER 		= g++ -o
 
@@ -20,7 +20,7 @@ rm 		= rm -f
 all: $(BINDIR)/$(TARGET)
 
 $(BINDIR)/$(TARGET): $(OBJECTS)
-	@$(LINKER) $@ $(OBJECTS) $(LFLAGS) 
+	@$(LINKER) $@ $(OBJECTS) $(LFLAGS)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@$(CC) $(CFLAGS) -c $< -o $@

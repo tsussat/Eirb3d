@@ -5,13 +5,15 @@
 #include "model.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include <float.h>
 
 int main( int argc, char ** argv ) {
 
-	ModelLoad("./bin/data/diablo.obj");
+	float xoffset, yoffset, range;
+
+	ModelLoad("./bin/data/head.obj", &xoffset, &yoffset, &range);
+	printf("%f %f\n", xoffset, yoffset);
 	int imgwidth,imgheigth,comp;
-	unsigned char *Texture = stbi_load("./bin/data/diablo_diffuse.tga", &imgwidth, &imgheigth, &comp, STBI_rgb_alpha);
+	unsigned char *Texture = stbi_load("./bin/data/head_diffuse.tga", &imgwidth, &imgheigth, &comp, STBI_rgb_alpha);
 
 	vector_t * g_vertex = ModelVertices();
 	vector_t * g_norm = ModelNormals();
@@ -36,7 +38,7 @@ int main( int argc, char ** argv ) {
 		WindowDrawClearColor( mainwindow, 64, 64, 64 );
 
 		//lumiere
-		vec3f_t lum = Vec3f(0, -1, .5);
+		vec3f_t lum = Vec3f(0, 0, 1);
 
 		int buffsize = height * width;
 		float zbuff[buffsize];
@@ -50,18 +52,18 @@ int main( int argc, char ** argv ) {
 
 			//charge les coordonnées des points
 			vec3f_t * point0 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[0]-1);
-			int x0 = (point0->x + 1) / 2 * width;
-			int y0 = height - (point0->y + 1) / 2 * height;
+			int x0 = (point0->x - xoffset) / range * width;
+			int y0 = height - (point0->y - yoffset) / range * height;
 			float z0 = point0->z;
 
 			vec3f_t * point1 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[1]-1);
-			int x1 = (point1->x + 1) / 2 * width;
-			int y1 = height - (point1->y + 1) / 2 * height;
+			int x1 = (point1->x - xoffset) / range * width;
+			int y1 = height - (point1->y - yoffset) / range * height;
 			float z1 = point1->z;
 
 			vec3f_t * point2 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[2]-1);
-			int x2 = (point2->x + 1) / 2 * width;
-			int y2 = height - (point2->y + 1) / 2 * height;
+			int x2 = (point2->x - xoffset) / range * width;
+			int y2 = height - (point2->y - yoffset) / range * height;
 			float z2 = point2->z;
 
 			//charge les textures
@@ -97,8 +99,8 @@ int main( int argc, char ** argv ) {
 			}
 
 			WindowDrawTriangle(mainwindow, zbuff, x0, y0, z0, x1, y1, z1, x2, y2, z2, tx0, ty0, tx1, ty1, tx2, ty2, &norm0, &norm1, &norm2, Texture, imgwidth, imgheigth, STBI_rgb_alpha, lum.x, lum.y, lum.z);
-			/* Trace les lignes de fer
-			WindowDrawLineB(mainwindow, x0, y0, x1, y1, 255, 255, 255);
+			//Trace les lignes de fer
+			/*WindowDrawLineB(mainwindow, x0, y0, x1, y1, 255, 255, 255);
 			WindowDrawLineB(mainwindow, x0, y0, x2, y2, 255, 255, 255);
 			WindowDrawLineB(mainwindow, x1, y1, x2, y2, 255, 255, 255);
 			*/

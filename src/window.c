@@ -196,7 +196,7 @@ void WindowDrawLine( window_t * w, float *zbuff, int x0, int y0, float z0, int x
   dx = x1 - x0 ;
   xinc = ( dx > 0 ) ? 1 : -1 ;
   dx = abs(dx) ;
-	if (lumz >0){ //permet d'afficher l'image par l'avant ou par l'arriere
+	if (lumz >=0){ //permet d'afficher l'image par l'avant ou par l'arriere
 		if(z  >= zbuff[y * w->width + x] ){
 			zbuff[y * w->width + x] = z ;
 	  	WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)+2]*intens)) ;
@@ -227,7 +227,7 @@ void WindowDrawLine( window_t * w, float *zbuff, int x0, int y0, float z0, int x
 		}
 
 		//affichage du point
-		if (lumz >0){
+		if (lumz >=0){
 			if(zbuff[y * w->width + x] <= z ){
 				zbuff[y * w->width + x] = z;
 			  WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)+2]*intens)) ;
