@@ -48,8 +48,11 @@ bool ModelLoad( char * objfilename , float* xoffset, float* yoffset, float* rang
 	vec3f_t v3;
 	float xmax = -FLT_MAX;
 	float ymax = -FLT_MAX;
+	float zmax = -FLT_MAX;
 	float xmin = FLT_MAX;
 	float ymin = FLT_MAX;
+	float zmin = FLT_MAX;
+
 	vec2f_t v2;
 	face_t face;
 	FILE *f = fopen(objfilename, "r");
@@ -73,6 +76,8 @@ bool ModelLoad( char * objfilename , float* xoffset, float* yoffset, float* rang
 			if (v3->x > xmax) xmax = v3->x ;
 			if (v3->y < ymin) ymin = v3->y ;
 			if (v3->y > ymax) ymax = v3->y ;
+			if (v3->z < zmin) zmin = v3->z ;
+			if (v3->z > zmax) zmax = v3->z ;
 
 		}
 		//chargement des normales dans la liste g_norm
@@ -94,7 +99,7 @@ bool ModelLoad( char * objfilename , float* xoffset, float* yoffset, float* rang
 			VectorAdd(g_face, face);
 		}
 	}
-	float xrange = (xmax-xmin);
+	float xrange = ((xmax-xmin)>(zmax-zmin)?(xmax-xmin):(zmax-zmin));
 	float yrange = (ymax-ymin);
 	if(xrange < yrange){
 		*range = abs(yrange);
