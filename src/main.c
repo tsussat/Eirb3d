@@ -35,8 +35,8 @@ int main( int argc, char ** argv ) {
 	clock_t time_i = clock();
 	clock_t time_c;
 
-	int rot = 0;
-	int angle = 1;
+	int angle = 0;
+	int rot = 1;
 
 	// Tant que l'utilisateur de ferme pas la fenêtre
 	while ( !done ) {
@@ -53,22 +53,16 @@ int main( int argc, char ** argv ) {
 		int buffsize = height * width;
 		float zbuff[buffsize];
 		for(int i = 0; i< buffsize; i++){
-			zbuff[i]= -FLT_MAX * lum.z;
+			zbuff[i]= -FLT_MAX;
 		}
 
-		float cosrot = cos(rot*PI/180.0);
-		float sinrot = sin(rot*PI/180.0);
+		float cosrot = cos(angle*PI/180.0);
+		float sinrot = sin(angle*PI/180.0);
 
 		for(int i = 0; i<VectorGetLength(g_face); i++){
 
 			face_t * face = (face_t *) VectorGetFromIdx(g_face, i);
 
-			/*x0 = point0->x*cos(rot*PI/180.0)+point0->z*sin(rot*PI/180.0);
-			z0 = -point0->x*sin(rot*PI/180.0)+point0->z*cos(rot*PI/180.0);
-			x1 = point1->x*cos(rot*PI/180.0)-point1->z*sin(rot*PI/180.0);
-			z1 = point1->x*sin(rot*PI/180.0)+point1->z*cos(rot*PI/180.0);
-			x2 = point2->x*cos(rot*PI/180.0)-point2->z*sin(rot*PI/180.0);
-			z2 = point2->x*sin(rot*PI/180.0)+point2->z*cos(rot*PI/180.0);*/
 
 			//charge les coordonnées des points
 			vec3f_t * point0 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[0]-1);
@@ -84,7 +78,7 @@ int main( int argc, char ** argv ) {
 			vec3f_t * point2 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[2]-1);
 			int x2 = (point2->x*cosrot+point2->z*sinrot - xoffset) / range * width;
 			int y2 = height - (point2->y - yoffset) / range * height;
-			float z2 = (-point2->x*sinrot+point2->z*cos(rot*PI/180.0)- xoffset)/ range * width;
+			float z2 = (-point2->x*sinrot+point2->z*cosrot- xoffset)/ range * width;
 
 			//charge les textures
 			vec2f_t * tex0 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->vt[0]-1);
@@ -99,13 +93,13 @@ int main( int argc, char ** argv ) {
 
 			//charge les normales
 			vec3f_t * norm0t = (vec3f_t *) VectorGetFromIdx(g_norm, face->vn[0]-1);
-			vec3f_t norm0 = Vec3f(norm0t->x, norm0t->y, norm0t->z);
+			vec3f_t norm0 = Vec3f(cosrot*norm0t->x+sinrot*norm0t->z, norm0t->y, -sinrot*norm0t->x+cosrot*norm0t->z);
 
 			vec3f_t * norm1t = (vec3f_t *) VectorGetFromIdx(g_norm, face->vn[1]-1);
-			vec3f_t norm1 = Vec3f(norm1t->x, norm1t->y, norm1t->z);
+			vec3f_t norm1 = Vec3f(cosrot*norm1t->x+sinrot*norm1t->z, norm1t->y, -sinrot*norm1t->x+cosrot*norm1t->z);
 
 			vec3f_t * norm2t = (vec3f_t *) VectorGetFromIdx(g_norm, face->vn[2]-1);
-			vec3f_t norm2 = Vec3f(norm2t->x, norm2t->y, norm2t->z);
+			vec3f_t norm2 = Vec3f(cosrot*norm2t->x+sinrot*norm1t->z, norm2t->y, -sinrot*norm2t->x+cosrot*norm2t->z);
 
 			//tri des sommets
 			if(y2 < y1){
@@ -128,8 +122,8 @@ int main( int argc, char ** argv ) {
 			*/
 
 		}
-		if(rot>=360) rot-=360;
-		else rot+=angle;
+		if(angle>=360) angle-=360;
+		else angle+=rot;
 
 		time_c = clock();
 		float secs = (time_c-time_i)/CLOCKS_PER_SEC;
