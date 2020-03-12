@@ -199,7 +199,7 @@ void WindowDrawLine( window_t * w, float *zbuff, int x0, int y0, float z0, int x
 
 	if(z  >= zbuff[y * w->width + x] ){
 		zbuff[y * w->width + x] = z ;
-  	WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)+2]*intens)) ;
+  	WindowDrawPoint(w, x, y, (int)(Texture[comp*(ty*imgwidth+tx)]*intens), (int)(Texture[comp*(ty*imgwidth+tx)+1]*intens), (int)(Texture[comp*(ty*imgwidth+tx)+2]*intens)) ;
 	}
 
 	//affichage de chaque point de la ligne
@@ -222,7 +222,7 @@ void WindowDrawLine( window_t * w, float *zbuff, int x0, int y0, float z0, int x
 		//affichage du point
 		if(zbuff[y * w->width + x] <= z ){
 			zbuff[y * w->width + x] = z;
-		  WindowDrawPoint(w, x, y, int(Texture[comp*(ty*imgwidth+tx)]*intens), int(Texture[comp*(ty*imgwidth+tx)+1]*intens), int(Texture[comp*(ty*imgwidth+tx)+2]*intens)) ;
+		  WindowDrawPoint(w, x, y, (int)(Texture[comp*(ty*imgwidth+tx)]*intens), (int)(Texture[comp*(ty*imgwidth+tx)+1]*intens), (int)(Texture[comp*(ty*imgwidth+tx)+2]*intens)) ;
 		}
 	}
 }
@@ -252,6 +252,7 @@ void WindowDrawTriangle( window_t * w, float *zbuff, int x0, int y0, float z0, i
 
 	vec3f_t norml0 = Vec3f(0,0,0); //normal du point de depart de la ligne
 	vec3f_t norml1 = Vec3f(0,0,0); //normal du point d'arrive de la ligne
+
 	for(int i=0; i<ya; i++){
 		//B1
 		if(i<yb1){

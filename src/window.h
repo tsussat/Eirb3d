@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include "SDL2/SDL.h"
-
+#include <omp.h>
 #include "geometry.h"
 
 /**
@@ -61,7 +61,7 @@ void  WindowDrawLineB		( window_t * w, int x0, int y0, int x1, int y1, Uint8 r, 
 /**
  * Dessine une ligne horizontal color�e dans la fen�tre
  */
-void	WindowDrawLine		( window_t * w, float *zbuff, int x0, int y0, float z0, int x1, int y1, float z1, float intens, int tx0, int ty0, int tx1, int ty1, vec3f_t *norm0, vec3f_t *norm1, unsigned char *Texture, int imgwidth, int imgheigth, int comp, float lumx, float lumy, float lumz);
+void	WindowDrawLine		( window_t * w, float *zbuff, int x0, int y0, float z0, int x1, int y1, float z1, int tx0, int ty0, int tx1, int ty1, vec3f_t *norm0, vec3f_t *norm1, unsigned char *Texture, int imgwidth, int imgheigth, int comp, float lumx, float lumy, float lumz);
 
 /**
  * Dessine un triangle colorie suivant les sommets, les texture, les normales et la lumiere

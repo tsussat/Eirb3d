@@ -7,8 +7,10 @@
 #include "stb_image.h"
 #include <math.h>
 #include <time.h>
+#include <omp.h>
 
 #define PI 3.14159265
+#define TREADS omp_get_max_threads()
 
 int main( int argc, char ** argv ) {
 
@@ -32,11 +34,19 @@ int main( int argc, char ** argv ) {
 	int done = false;
 
 	int frames = 0;
-	clock_t time_i = clock();
-	clock_t time_c;
+	double time_i = omp_get_wtime();
+	double time_c;
 
-	int angle = 0;
-	int rot = 1;
+	int angle = 1;
+
+	float cosrot = cos(angle*PI/180.0);
+	float sinrot = sin(angle*PI/180.0);
+
+	for(int i = 0; i<VectorGetLength(g_vertex); i++){
+		vec3f_t * point = (vec3f_t *) VectorGetFromIdx(g_vertex, i);
+		point->y = height - (point->y - yoffset) / range * height;
+
+	}
 
 	// Tant que l'utilisateur de ferme pas la fenêtre
 	while ( !done ) {
@@ -56,8 +66,24 @@ int main( int argc, char ** argv ) {
 			zbuff[i]= -FLT_MAX;
 		}
 
-		float cosrot = cos(angle*PI/180.0);
-		float sinrot = sin(angle*PI/180.0);
+		for(int i = 0; i<VectorGetLength(g_vertex); i++){
+			vec3f_t * point = (vec3f_t *) VectorGetFromIdx(g_vertex, i);
+			float x0 = (point->x*cosrot+point->z*sinrot);
+			float z0 = (-point->x*sinrot+point->z*cosrot);
+			point->x = x0;
+			point->z = z0;
+		}
+
+		for(int i = 0; i<VectorGetLength(g_norm); i++){
+			vec3f_t * point = (vec3f_t *) VectorGetFromIdx(g_norm, i);
+			float x0 = point->x*cosrot+point->z*sinrot;
+			float z0 = -point->x*sinrot+point->z*cosrot;
+			point->x = x0;
+			point->z = z0;
+		}
+
+		omp_set_num_threads(TREADS);
+		#pragma omp parallel for
 
 		for(int i = 0; i<VectorGetLength(g_face); i++){
 
@@ -66,19 +92,19 @@ int main( int argc, char ** argv ) {
 
 			//charge les coordonnées des points
 			vec3f_t * point0 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[0]-1);
-			int x0 = (point0->x*cosrot+point0->z*sinrot - xoffset) / range * width;
-			int y0 = height - (point0->y - yoffset) / range * height;
-			float z0 = (-point0->x*sinrot+point0->z*cosrot- xoffset)/ range * width;
+			int x0 = (point0->x- xoffset) / range * width;
+			int y0 = point0->y;
+			float z0 = (point0->z- xoffset) / range * width;
 
 			vec3f_t * point1 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[1]-1);
-			int x1 = (point1->x*cosrot+point1->z*sinrot - xoffset) / range * width;
-			int y1 = height - (point1->y - yoffset) / range * height;
-			float z1 = (-point1->x*sinrot+point1->z*cosrot- xoffset)/ range * width;
+			int x1 = (point1->x- xoffset) / range * width;
+			int y1 = point1->y;
+			float z1 = (point1->z- xoffset) / range * width;
 
 			vec3f_t * point2 = (vec3f_t *) VectorGetFromIdx(g_vertex, face->v[2]-1);
-			int x2 = (point2->x*cosrot+point2->z*sinrot - xoffset) / range * width;
-			int y2 = height - (point2->y - yoffset) / range * height;
-			float z2 = (-point2->x*sinrot+point2->z*cosrot- xoffset)/ range * width;
+			int x2 = (point2->x- xoffset) / range * width;
+			int y2 = point2->y;
+			float z2 = (point2->z- xoffset) / range * width;
 
 			//charge les textures
 			vec2f_t * tex0 =(vec2f_t *) VectorGetFromIdx(g_texcoord, face->vt[0]-1);
@@ -93,13 +119,13 @@ int main( int argc, char ** argv ) {
 
 			//charge les normales
 			vec3f_t * norm0t = (vec3f_t *) VectorGetFromIdx(g_norm, face->vn[0]-1);
-			vec3f_t norm0 = Vec3f(cosrot*norm0t->x+sinrot*norm0t->z, norm0t->y, -sinrot*norm0t->x+cosrot*norm0t->z);
+			vec3f_t norm0 = Vec3f(norm0t->x, norm0t->y, norm0t->z);
 
 			vec3f_t * norm1t = (vec3f_t *) VectorGetFromIdx(g_norm, face->vn[1]-1);
-			vec3f_t norm1 = Vec3f(cosrot*norm1t->x+sinrot*norm1t->z, norm1t->y, -sinrot*norm1t->x+cosrot*norm1t->z);
+			vec3f_t norm1 = Vec3f(norm1t->x, norm1t->y, norm1t->z);
 
 			vec3f_t * norm2t = (vec3f_t *) VectorGetFromIdx(g_norm, face->vn[2]-1);
-			vec3f_t norm2 = Vec3f(cosrot*norm2t->x+sinrot*norm1t->z, norm2t->y, -sinrot*norm2t->x+cosrot*norm2t->z);
+			vec3f_t norm2 = Vec3f(norm2t->x, norm2t->y, norm2t->z);
 
 			//tri des sommets
 			if(y2 < y1){
@@ -122,16 +148,14 @@ int main( int argc, char ** argv ) {
 			*/
 
 		}
-		if(angle>=360) angle-=360;
-		else angle+=rot;
 
-		time_c = clock();
-		float secs = (time_c-time_i)/CLOCKS_PER_SEC;
+		time_c = omp_get_wtime();
+		double secs = (time_c-time_i);
 		if(secs>=1.0){
-			printf("\r%0.1f FPS, %d frames, %d clocks", frames/secs, frames, time_c-time_i);
+			printf("\r%0.1f FPS, %d frames, %f ms", frames/secs, frames, (time_c-time_i)*1000);
 			fflush(stdout);
 			frames=0;
-			time_i = clock();
+			time_i = omp_get_wtime();
 		}
 		else frames++;
 		// Mise à jour de la fenêtre
